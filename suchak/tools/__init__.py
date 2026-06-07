@@ -7,6 +7,7 @@ Factory helpers for creating a registry of built-in tools.
 from pathlib import Path
 
 from suchak.tools.list_files import ListFilesTool
+from suchak.tools.nmap_scan import NmapScanTool
 from suchak.tools.read_file import ReadFileTool
 from suchak.tools.registry import ToolRegistry
 
@@ -23,6 +24,7 @@ def create_registry(workspace_dir: str | Path) -> ToolRegistry:
     """
     registry = ToolRegistry()
     registry.register(ListFilesTool(workspace_dir))
+    registry.register(NmapScanTool())
     registry.register(ReadFileTool(workspace_dir))
     return registry
 

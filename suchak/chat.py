@@ -41,6 +41,9 @@ def handle_tool_command(
     if name == "/list_files":
         return _handle_list_files(args, tool_registry)
 
+    if name == "/nmap_scan":
+        return _handle_nmap_scan(args, tool_registry)
+
     if name == "/read_file":
         return _handle_read_file(args, tool_registry)
 
@@ -77,6 +80,26 @@ def _handle_read_file(args: list[str], tool_registry: ToolRegistry) -> str:
         return "Usage: /read_file <path>"
 
     return tool_registry.execute("read_file", path=args[0])
+
+
+def _handle_nmap_scan(args: list[str], tool_registry: ToolRegistry) -> str:
+    target = None
+    top_ports = False
+
+    for arg in args:
+        if arg == "--top-ports":
+            top_ports = True
+        elif arg.startswith("-"):
+            return f"Error: unknown option for /nmap_scan: {arg}"
+        elif target is None:
+            target = arg
+        else:
+            return "Error: /nmap_scan accepts exactly one target."
+
+    if target is None:
+        return "Usage: /nmap_scan <target> [--top-ports]"
+
+    return tool_registry.execute("nmap_scan", target=target, top_ports=top_ports)
 
 
 def _handle_summarize(
